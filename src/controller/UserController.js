@@ -1,7 +1,6 @@
 const db = require('../config/database.js');
 const { Respuestas } = require('../respuestas.js');
-const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
+const mailer = require('../nodemailer.js');
 
 this.respuesta = new Respuestas();
 
@@ -18,30 +17,14 @@ exports.login = async (req, res) => {
         if (result.recordset[0].correo) {
 
             if (result.recordset[0].contrasena == contrasena) {
-                /*
-                const payload = { user: correo };
-                const secret = contrasena;
-                const token = jwt.sign(payload, secret, { expiresIn: '1h' });
-*/
-                // this.respuesta.token(token, result.recordset[0]);
-                //this.respuesta.response.result = ( );
 
-                const num = Math.floor(Math.random() * 90000) + 10000;
+                const numeroAleatorio = Math.floor(Math.random() * 90000) + 10000;
 
-                const secret = 'claveSecreta';
+                this.respuesta.verifyCode(numeroAleatorio, result.recordset[0]);
 
-                const token = jwt.sign({ num }, secret, { expiresIn: '1h' });
+                const msg = `Tu código de autenticación es: ${numeroAleatorio}`;
 
-                this.respuesta.response.status = "ok";
-                this.respuesta.response.result = "token?";
-
-                console.log(this.respuesta)
-
-                saveToken(token, result.recordset[0].id)
-
-                console.log(`UPDATE usuarios SET token = '${token}' WHERE id = ${result.recordset[0].id}`); // número de filas afectadas
-
-                res.json(this.respuesta);
+                mailer.sendAuthenticationCode(correo, msg, res, this.respuesta)
 
             } else if (result.recordset[0].contrasena != contrasena) {
 
@@ -54,7 +37,7 @@ exports.login = async (req, res) => {
     } catch (err) {
         this.respuesta.error_402();
 
-        res.json(err);
+        res.json(this.respuesta);
     }
 }
 async function saveToken(token, id) {

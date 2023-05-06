@@ -7,6 +7,16 @@ class Respuestas {
         };
     }
 
+    verifyCode(verifyCode, informationValue) {
+        this.response.status = "ok";
+        this.response.result = {
+            code: verifyCode,
+            information: informationValue,
+        };
+
+        return this.response;
+    }
+
     token(tokenValue, informationValue) {
         this.response.status = "ok";
         this.response.result = {
