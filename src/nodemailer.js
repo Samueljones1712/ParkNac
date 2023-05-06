@@ -13,7 +13,7 @@ sendEmails.sendAuthenticationCode = async (email, text, res, respuesta) => {
 
     const mailOptions = {
         from: "pruebas05052023@gmail.com",
-        to: "samueljone01234@gmail.com",
+        to: email,
         subject: "Código de autenticación",
         text: text,
     };
