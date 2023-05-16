@@ -58,7 +58,7 @@ class Respuestas {
         this.response.status = "error";
         this.response.result = {
             error_id: "401",
-            error_msg: "Contrasena incorrecta o en formato incorrecto",
+            error_msg: "Contrasena incorrecta.",
         };
         return this.response;
     }
@@ -67,7 +67,7 @@ class Respuestas {
         this.response.status = "error";
         this.response.result = {
             error_id: "402",
-            error_msg: "Correo incorrecto o en formato incorrecto",
+            error_msg: "Correo incorrecto.",
         };
         return this.response;
     }

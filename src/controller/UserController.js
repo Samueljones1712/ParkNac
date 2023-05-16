@@ -1,10 +1,36 @@
+const jwt = require('jsonwebtoken');
 const db = require('../config/database.js');
 const { Respuestas } = require('../respuestas.js');
 const mailer = require('../nodemailer.js');
 
+
 this.respuesta = new Respuestas();
 
 const pool = new db.sql.ConnectionPool(db.config);
+
+exports.registerUser = async (req, res) => {
+
+    const { correo, contrasena } = req.body;
+
+    console.log(req.body);
+
+
+    res.json(this.respuesta);
+
+}
+
+exports.generateToken = (req, res) => {
+
+    const { correo } = req.body;
+
+    const token = jwt.sign({
+        correo: correo
+    }, process.env.SECRET_KEY || 'pepito123', {
+        expiresIn: '10000'
+    })
+    console.log(token)
+    res.json({ token });
+}
 
 exports.login = async (req, res) => {
     const { correo, contrasena } = req.body;
@@ -21,18 +47,14 @@ exports.login = async (req, res) => {
                 const numeroAleatorio = Math.floor(Math.random() * 90000) + 10000;
 
                 this.respuesta.verifyCode(numeroAleatorio, result.recordset[0]);
-
                 const msg = `Tu código de autenticación es: ${numeroAleatorio}`;
-
                 mailer.sendAuthenticationCode(correo, msg, res, this.respuesta)
 
             } else if (result.recordset[0].contrasena != contrasena) {
 
                 this.respuesta.error_401();
-
                 res.json(this.respuesta)
             }
-
         }
     } catch (err) {
         this.respuesta.error_402();
@@ -40,6 +62,7 @@ exports.login = async (req, res) => {
         res.json(this.respuesta);
     }
 }
+
 async function saveToken(token, id) {
     try {
         await pool.connect();
@@ -52,38 +75,6 @@ async function saveToken(token, id) {
         console.error('Error al actualizar el registro', err);
         throw err;
     }
-}
-
-
-function correo() {
-    // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'Samuelferrari01234@gmail.com',
-            pass: 'SamuelJones2001.'
-        }
-    });
-
-    // setup email data with unicode symbols
-    let mailOptions = {
-        from: '"Nombre remitente" <Samuelferrari01234@gmail.com>', // dirección del remitente
-        to: 'Samuelferrari123@outlook.es', // lista de destinatarios separados por coma
-        subject: 'Asunto del correo', // Asunto del correo
-        text: 'Contenido del correo en formato texto plano', // Contenido del correo en formato texto plano
-        html: '<p>Contenido del correo en formato HTML</p>' // Contenido del correo en formato HTML
-    };
-
-    // send mail with defined transport object
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Correo enviado: ' + info.response);
-        }
-    });
-
-
 }
 
 

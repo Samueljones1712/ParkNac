@@ -4,7 +4,7 @@ const config = {
     user: 'informatica123',
     password: 'informatica123',
     server: 'PC-LAPTOP',
-    database: 'ParqueNacional',
+    database: 'ParNac',
     options: {
         trustedconection: false,
         enableArithAbort: true,

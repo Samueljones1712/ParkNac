@@ -19,8 +19,8 @@ sendEmails.sendAuthenticationCode = async (email, text, res, respuesta) => {
     };
 
     try {
-        const info = await transporter.sendMail(mailOptions);
-        console.log(`Correo electrónico enviado: ${info.messageId}`);
+        //const info = await transporter.sendMail(mailOptions);
+        console.log(`Correo electrónico enviado: ${email}`);
         //res.status(200).json({ success: true });
         console.log(respuesta);
         res.json(respuesta);

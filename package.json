@@ -15,8 +15,12 @@
     "tedious": "^11.0.8"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
   },
   "author": "",
-  "license": "IST"
+  "license": "IST",
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.2"
+  }
 }
