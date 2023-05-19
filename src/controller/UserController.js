@@ -3,20 +3,34 @@ const db = require('../config/database.js');
 const { Respuestas } = require('../respuestas.js');
 const mailer = require('../nodemailer.js');
 
-
 this.respuesta = new Respuestas();
 
 const pool = new db.sql.ConnectionPool(db.config);
 
 exports.registerUser = async (req, res) => {
 
-    const { correo, contrasena } = req.body;
+    const { cedula, nombre, apellido, contrasena, correo, Tipo } = req.body;
 
-    console.log(req.body);
+    console.log(cedula);
 
+    try {
+        await pool.connect(); // Abrir conexión
+        const result = await pool.query("EXEC spRegistro '" + nombre + "','" + apellido + "','" + contrasena + "','" + correo + "','" + Tipo + "';");
 
-    res.json(this.respuesta);
+        console.log(result.rowsAffected); // número de filas afectadas
 
+        this.respuesta.response.result = result.rowsAffected;
+
+        console.log(this.respuesta);
+
+        await pool.close(); // Cerrar conexión
+
+        await res.json(this.respuesta);
+
+    } catch (err) {
+        console.log(err);
+        res.json(this.respuesta.error_500(err));
+    }
 }
 
 exports.generateToken = (req, res) => {
@@ -25,58 +39,38 @@ exports.generateToken = (req, res) => {
 
     const token = jwt.sign({
         correo: correo
-    }, process.env.SECRET_KEY || 'pepito123', {
-        expiresIn: '10000'
-    })
+    }, process.env.SECRET_KEY || 'pepito123',
+        { expiresIn: '9990000' })
     console.log(token)
     res.json({ token });
 }
+
+
 
 exports.login = async (req, res) => {
     const { correo, contrasena } = req.body;
 
     try {
-        await pool.connect(); // Abrir conexión
-        const result = await pool.query("SELECT * FROM usuarios where correo='" + correo + "';");
-        pool.close(); // Cerrar conexión
 
-        if (result.recordset[0].correo) {
+        const resultado = await db.loginDB(correo, contrasena);
 
-            if (result.recordset[0].contrasena == contrasena) {
+        if (resultado == "Correcto") {
 
-                const numeroAleatorio = Math.floor(Math.random() * 90000) + 10000;
+            const numeroAleatorio = Math.floor(Math.random() * 90000) + 10000;
+            this.respuesta.verifyCode(numeroAleatorio, correo);
+            const msg = `Tu código de autenticación es: ${numeroAleatorio}`;
+            mailer.sendAuthenticationCode(correo, msg, res, this.respuesta)
 
-                this.respuesta.verifyCode(numeroAleatorio, result.recordset[0]);
-                const msg = `Tu código de autenticación es: ${numeroAleatorio}`;
-                mailer.sendAuthenticationCode(correo, msg, res, this.respuesta)
-
-            } else if (result.recordset[0].contrasena != contrasena) {
-
-                this.respuesta.error_401();
-                res.json(this.respuesta)
-            }
+        } else {
+            this.respuesta.error_500("El Correo o la contrasena es incorrecto");
+            res.json(this.respuesta);
         }
-    } catch (err) {
-        this.respuesta.error_402();
 
+    } catch (err) {
+        this.respuesta.error_500(err);
         res.json(this.respuesta);
     }
 }
-
-async function saveToken(token, id) {
-    try {
-        await pool.connect();
-        const result = await pool.query(
-            `UPDATE usuarios SET token = '${token}' WHERE id = ${id}`
-        );
-        console.log(result.rowsAffected); // número de filas afectadas
-        pool.close();
-    } catch (err) {
-        console.error('Error al actualizar el registro', err);
-        throw err;
-    }
-}
-
 
 exports.index = async (req, res) => {
     try {
@@ -110,101 +104,3 @@ exports.edit = async (req, res) => {
         res.send(err)
     }
 }
-
-
-
-
-exports.delete = async (req, res) => {
-    const { id } = req.query;
-
-    try {
-        await pool.connect();
-        const result = await pool.query(
-            `DELETE FROM usuarios WHERE id = ${id}`
-        );
-        console.log(result.rowsAffected); // número de filas afectadas
-        res.json({
-            message: `El registro con id ${id} ha sido eliminado correctamente`
-        });
-        await pool.close();
-    } catch (err) {
-        console.error('Error al eliminar el registro', err);
-        res.send(err)
-    }
-}
-
-
-function addToken(token, id) {
-    try {
-        pool.connect();
-        const result = pool.query(
-            `UPDATE usuarios SET token = '${token}' WHERE id = ${id}`
-        );
-        console.log(result.rowsAffected); // número de filas afectadas
-
-        pool.close();
-    } catch (err) {
-        console.error('Error al actualizar el registro', err);
-        res.send(err)
-    }
-}
-
-
-
-
-
-
-
-
-
-// exports.index = async (req, res) => {
-
-//     const pool = new db_conection.ConnectionPool(db_conection.config);
-//     pool.connect().then(() => {
-//         //simple query
-//         pool.request().query('select * from Persona', (err, result) => {
-//             if (err) res.send(err)
-//             else {
-//                 return res.json({
-//                     data: result.recordset
-//                 })
-//             }
-//         })
-//         db_conection.close();
-
-//     })
-//     console.log('ending sql');
-
-// }
-
-//     db_conection.sql.connect(db_conection.config, function (err) {
-//         if (err) {
-//             console.log(err);
-//             res.json("Un error es:", err);
-//         } else {
-//             // create Request object
-//             res.json("Entro 1");
-//             var request = new db_conection.sql.Request();
-//             res.json("Entro 2");
-//             // query to the database and get the records
-//             request.query('SELECT * FROM Prueba2', function (err, result) {
-
-//                 if (err) {
-//                     res.json("Error es ", err);
-//                     console.log(err);
-//                 } else {
-//                     res.json(result);
-//                     // send records as a response
-//                     res.json(result.recordsets[0]);
-//                 }
-//             });
-//         }
-//     });
-// };
-
-
-
-
-
-
-

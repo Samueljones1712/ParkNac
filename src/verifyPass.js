@@ -1,18 +1,3 @@
-const sql = require('mssql')
-/* //Local
-const config = {
-    user: 'informatica123',
-    password: 'informatica123',
-    server: 'PC-LAPTOP',
-    database: 'ParNac',
-    options: {
-        trustedconection: false,
-        enableArithAbort: true,
-        encrypt: false,
-    }
-}
-*/
-
 const config = {
     user: 'user1',
     password: 'Parnac2023',
@@ -25,9 +10,10 @@ const config = {
     }
 }
 
-async function loginDB(correo, contrasena) {
+const pool = new sql.ConnectionPool(config)
 
-    const pool = new sql.ConnectionPool(config);
+
+async function login(correo, contrasena) {
 
     try {
 
@@ -35,11 +21,11 @@ async function loginDB(correo, contrasena) {
         const result = await pool.request().input('Correo', sql.NVarChar(50), correo)
             .input('Contrasena', sql.NVarChar(50), contrasena).output('IsMatch', sql.VarChar).execute('spVerifyPassword');
         const isMatchValue = result.output.IsMatch;
-
-        return isMatchValue;
+        console.log(isMatchValue);
 
         await pool.close(); // Cerrar conexión
 
+        return isMatchValue;
 
     } catch (err) {
         console.log("Error del server: " + err);
@@ -49,6 +35,6 @@ async function loginDB(correo, contrasena) {
     }
 }
 
-exports.loginDB = loginDB;
-exports.config = config;
-exports.sql = sql
+
+exports.login = loginfunction;
+
