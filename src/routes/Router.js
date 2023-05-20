@@ -1,6 +1,14 @@
+const EventEmitter = require('events');
+
+const emitter = new EventEmitter()
+// or 0 to turn off the limit
+emitter.setMaxListeners(0)
+
 const { Router } = require('express');
 const express = require('express');
 const router = express.Router();
+
+
 
 const controllerUser = require('../controller/UserController');
 const controllerParque = require('../controller/ParqueNacionalController');
@@ -22,14 +30,14 @@ router.delete('/ParqueNacional/delete/:Id', validateToken, controllerParque.dele
 /* Tarifa */
 router.get('/Entradas/', validateToken, controllerEntradas.getEntradas);
 router.post('/Entradas/add', validateToken, controllerEntradas.addEntradas);
-router.put('/Entradas/add', validateToken, controllerEntradas.updateEntradas);
+router.put('/Entradas/actualizar', validateToken, controllerEntradas.updateEntradas);
 router.delete('/Entradas/delete/:Id', validateToken, controllerEntradas.deleteEntradas);
 
 /* Usuario */
-router.get('/user', controllerUser.index);
-router.post('/user/add', controllerUser.add);
-router.put('/user/add', controllerUser.edit);
-router.delete('/user/delete/:Id', controllerUser.delete);
-router.put('/user/changePassword/', controllerUser.changePassword);
+router.get('/user', validateToken, controllerUser.index);
+router.post('/user/add', validateToken, controllerUser.add);
+router.post('/user/delete', validateToken, controllerUser.deleteUser);
+router.put('/user/changePassword/', validateToken, controllerUser.changePassword);
+router.put('/user/editar', validateToken, controllerUser.editUser)
 
 module.exports = router;

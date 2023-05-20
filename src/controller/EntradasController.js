@@ -7,8 +7,6 @@ const pool = new db.sql.ConnectionPool(db.config);
 
 exports.getEntradas = async (req, res) => {
 
-    console.log("Entradas metodo")
-
     try {
         await pool.connect(); // Abrir conexión
         const result = await pool.query("SELECT * FROM Entradas;");
@@ -26,10 +24,23 @@ exports.getEntradas = async (req, res) => {
 
 exports.addEntradas = async (req, res) => {
 
-    console.log("LLego");
-    console.log(req.body);
+    const { fecha, fk_idParque, fk_cedula, estado, fechaVencimiento, tarifa } = req.body;
 
-    res.json(this.respuesta);
+    try {
+
+        await pool.connect(); // Abrir conexión    
+
+        const result = await pool.query("EXEC sp_insertEntrada '" + fk_cedula + "'," + [fk_idParque] + "," + [tarifa] + ",'Nacional';");
+
+        this.respuesta.response.result = result.rowsAffected;
+        console.log(this.respuesta);
+        await pool.close(); // Cerrar conexión
+        await res.json(this.respuesta);
+
+    } catch (err) {
+        console.error('Error al insertar la entrada', err);
+        res.send(err)
+    }
 
 }
 

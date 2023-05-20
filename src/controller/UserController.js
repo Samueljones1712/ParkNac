@@ -96,8 +96,6 @@ exports.changePassword = async (req, res) => {
 
     const { id, contrasena } = req.body;
 
-    console.log(id + " - " + contrasena);
-
     try {
         await pool.connect(); // Abrir conexión
         console.log("EXEC sp_changePass " + id + ", '" + contrasena + "';");
@@ -122,10 +120,48 @@ exports.add = async (req, res) => {
 }
 
 
-exports.delete = async (req, res) => {
-    console.log("Elimino" + req.params);
-    this.respuesta.response.result = req.params;
-    res.json(this.respuesta);
+exports.deleteUser = async (req, res) => {
+
+    const { id, tipo } = req.body;
+
+    console.log("EXEC sp_deleteUsuario " + id + ", '" + tipo + "';");
+
+    try {
+        await pool.connect(); // Abrir conexión
+
+        const result = await pool.query("EXEC sp_deleteUsuario " + id + ", '" + tipo + "';");
+
+        this.respuesta.response.result = result.rowsAffected;
+        console.log(this.respuesta);
+
+        await pool.close(); // Cerrar conexión
+        await res.json(this.respuesta);
+
+    } catch (err) {
+        console.error('Error al eliminar el usuario', err);
+        res.send(err)
+    }
 
 }
 
+exports.editUser = async (req, res) => {
+
+    const { id, nombre, apellido } = req.body;
+
+    try {
+        await pool.connect(); // Abrir conexión
+
+        console.log("EXEC sp_editUser " + id + ", '" + nombre + "','" + apellido + "';");
+
+        const result = await pool.query("EXEC sp_editUser " + id + ", '" + nombre + "','" + apellido + "';");
+
+        this.respuesta.response.result = result.rowsAffected;
+        console.log(this.respuesta);
+        await pool.close(); // Cerrar conexión
+        await res.json(this.respuesta);
+
+    } catch (err) {
+        console.error('Error al eliminar el usuario', err);
+        res.send(err)
+    }
+}

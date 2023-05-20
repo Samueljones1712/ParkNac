@@ -13,7 +13,6 @@ exports.getParqueNacional = async (req, res) => {
         await pool.close(); // Cerrar conexión
 
         res.json(result.recordset)
-        console.log(result.recordset);
 
     } catch (err) {
         this.respuesta.error_500();
