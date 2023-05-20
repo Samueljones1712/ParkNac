@@ -9,13 +9,13 @@ const pool = new db.sql.ConnectionPool(db.config);
 
 exports.registerUser = async (req, res) => {
 
-    const { cedula, nombre, apellido, contrasena, correo, Tipo } = req.body;
+    const { cedula, nombre, apellido, contrasena, correo } = req.body;
 
     console.log(cedula);
 
     try {
         await pool.connect(); // Abrir conexión
-        const result = await pool.query("EXEC spRegistro '" + nombre + "','" + apellido + "','" + contrasena + "','" + correo + "','" + Tipo + "';");
+        const result = await pool.query("EXEC spRegistro '" + nombre + "','" + apellido + "','" + contrasena + "','" + correo + "','Visitante';");
 
         console.log(result.rowsAffected); // número de filas afectadas
 
@@ -77,9 +77,7 @@ exports.index = async (req, res) => {
         await pool.connect(); // Abrir conexión
         const result = await pool.query('SELECT * FROM usuarios');
         console.log(result.recordset);
-        res.json({
-            data: result.recordset
-        })
+        await res.json(result.recordset)
         await pool.close(); // Cerrar conexión
     } catch (err) {
         console.error('Error al consultar usuarios', err);
@@ -89,18 +87,45 @@ exports.index = async (req, res) => {
 
 
 exports.edit = async (req, res) => {
-    const { id, nombre, apellido } = req.body;
+    console.log(req.body);
+    this.respuesta.response.result = req.body;
+    res.json(this.respuesta);
+}
+
+exports.changePassword = async (req, res) => {
+
+    const { id, contrasena } = req.body;
+
+    console.log(id + " - " + contrasena);
 
     try {
-        await pool.connect();
-        const result = await pool.query(
-            `UPDATE usuarios SET nombre = '${nombre}', apellido = '${apellido}' WHERE id = ${id}`
-        );
-        console.log(result.rowsAffected); // número de filas afectadas
+        await pool.connect(); // Abrir conexión
+        console.log("EXEC sp_changePass " + id + ", '" + contrasena + "';");
+        const result = await pool.query("EXEC sp_changePass " + id + ", '" + contrasena + "';");
 
-        await pool.close();
+        this.respuesta.response.result = result.rowsAffected;
+        console.log(this.respuesta);
+        await pool.close(); // Cerrar conexión
+        await res.json(this.respuesta);
+
     } catch (err) {
-        console.error('Error al actualizar el registro', err);
+        console.error('Error al cambiar la contrasena usuarios', err);
         res.send(err)
     }
 }
+
+
+exports.add = async (req, res) => {
+    console.log(req.body);
+    this.respuesta.response.result = req.body;
+    res.json(this.respuesta);
+}
+
+
+exports.delete = async (req, res) => {
+    console.log("Elimino" + req.params);
+    this.respuesta.response.result = req.params;
+    res.json(this.respuesta);
+
+}
+

@@ -84,8 +84,6 @@ exports.deleteParqueNacional = async (req, res) => {
 
         const result = await pool.query("EXEC sp_deletePark '" + req.params.Id + "';");
 
-
-
         this.respuesta.response.result = result;
 
         await res.json(this.respuesta);
