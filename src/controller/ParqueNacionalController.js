@@ -14,6 +14,8 @@ exports.getParqueNacional = async (req, res) => {
 
         res.json(result.recordset)
 
+        console.log(result.recordset);
+
     } catch (err) {
         this.respuesta.error_500();
 

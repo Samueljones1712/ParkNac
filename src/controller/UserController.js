@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/database.js');
 const { Respuestas } = require('../respuestas.js');
 const mailer = require('../nodemailer.js');
+const { setTimeout } = require('timers/promises');
 
 this.respuesta = new Respuestas();
 
@@ -11,11 +12,11 @@ exports.registerUser = async (req, res) => {
 
     const { cedula, nombre, apellido, contrasena, correo } = req.body;
 
-    console.log(cedula);
+    console.log(req.body);
 
     try {
         await pool.connect(); // Abrir conexión
-        const result = await pool.query("EXEC spRegistro '" + nombre + "','" + apellido + "','" + contrasena + "','" + correo + "','Visitante';");
+        const result = await pool.query("EXEC spRegistro '" + nombre + "','" + apellido + "','" + contrasena + "','" + correo + "', 'Cedula';");
 
         console.log(result.rowsAffected); // número de filas afectadas
 
@@ -84,6 +85,56 @@ exports.index = async (req, res) => {
         res.send(err)
     }
 }
+
+exports.administradores = async (req, res) => {
+    try {
+        await pool.connect(); // Abrir conexión
+        const result = await pool.query('SELECT * FROM Administradores');
+        console.log(result.recordset);
+        await res.json(result.recordset)
+        await pool.close(); // Cerrar conexión
+    } catch (err) {
+        console.error('Error al consultar los administradores', err);
+        res.send(err)
+    }
+}
+
+exports.padron = async (req, res) => {
+
+    const { Id } = req.params;
+
+    try {
+        await pool.connect(); // Abrir conexión
+
+        const result = await pool.query("SELECT * FROM Padron where cedula='" + Id + "';");
+        console.log(result.recordset);
+
+        await res.json(result.recordset)
+        await pool.close(); // Cerrar conexión
+    } catch (err) {
+        console.error('Error al consultar el Padron', err);
+        res.send(err)
+    }
+}
+
+
+exports.view_administradores = async (req, res) => {
+
+
+    try {
+        await pool.connect(); // Abrir conexión
+
+        const result = await pool.query("SELECT * FROM view_administradores;");
+        console.log(result.recordset);
+
+        await res.json(result.recordset)
+        await pool.close(); // Cerrar conexión
+    } catch (err) {
+        console.error('Error al consultar los administradores', err);
+        res.send(err)
+    }
+}
+
 
 
 exports.edit = async (req, res) => {

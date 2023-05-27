@@ -40,4 +40,9 @@ router.post('/user/delete', validateToken, controllerUser.deleteUser);
 router.put('/user/changePassword/', validateToken, controllerUser.changePassword);
 router.put('/user/editar', validateToken, controllerUser.editUser)
 
+
+router.get('/user/administradores', validateToken, controllerUser.administradores);
+router.get('/user/view_administradores', validateToken, controllerUser.view_administradores);
+router.get('/user/padron/:Id', validateToken, controllerUser.padron);
+
 module.exports = router;

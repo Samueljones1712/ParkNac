@@ -26,11 +26,13 @@ exports.addEntradas = async (req, res) => {
 
     const { fecha, fk_idParque, fk_cedula, estado, fechaVencimiento, tarifa } = req.body;
 
+    console.log(fechaVencimiento);
+
     try {
 
         await pool.connect(); // Abrir conexión    
 
-        const result = await pool.query("EXEC sp_insertEntrada '" + fk_cedula + "'," + [fk_idParque] + "," + [tarifa] + ",'Nacional';");
+        const result = await pool.query("EXEC sp_insertEntrada '" + fk_cedula + "'," + [fk_idParque] + "," + [tarifa] + ",'Nacional','" + [fechaVencimiento] + "';");
 
         this.respuesta.response.result = result.rowsAffected;
         console.log(this.respuesta);
@@ -55,6 +57,25 @@ exports.deleteEntradas = async (req, res) => {
 
     console.log(req.params);
 
-    res.json(this.respuesta);
+    const { Id } = req.params;
+
+
+    try {
+
+        await pool.connect(); // Abrir conexión    
+
+        console.log("sp_deleteEntrada " + Id + ";");
+
+        const result = await pool.query("sp_deleteEntrada " + Id + ";");
+
+        this.respuesta.response.result = result.rowsAffected;
+        console.log(this.respuesta);
+        await pool.close(); // Cerrar conexión
+        await res.json(this.respuesta);
+
+    } catch (err) {
+        console.error('Error al insertar la entrada', err);
+        res.send(err)
+    }
 
 }
