@@ -20,10 +20,9 @@ exports.registerUser = async (req, res) => {
         await pool.connect(); // Abrir conexión
         const result = await pool.query("EXEC spRegistro '" + nombre + "','" + apellido + "','" + contrasena + "','" + correo + "', '" + identificacion + "';");
 
-        console.log("EXEC spRegistro '" + nombre + "','" + apellido + "','" + contrasena + "','" + correo + "', '" + identificacion + "';");
-
-
         console.log(result.rowsAffected); // número de filas afectadas
+
+        this.respuesta.response.status = "ok"
 
         this.respuesta.response.result = result.rowsAffected;
 
