@@ -8,15 +8,20 @@ this.respuesta = new Respuestas();
 
 const pool = new db.sql.ConnectionPool(db.config);
 
+
+
 exports.registerUser = async (req, res) => {
 
-    const { cedula, nombre, apellido, contrasena, correo } = req.body;
+    const { identificacion, nombre, apellido, contrasena, correo } = req.body;
 
-    console.log(req.body);
+
 
     try {
         await pool.connect(); // Abrir conexión
-        const result = await pool.query("EXEC spRegistro '" + nombre + "','" + apellido + "','" + contrasena + "','" + correo + "', 'Cedula';");
+        const result = await pool.query("EXEC spRegistro '" + nombre + "','" + apellido + "','" + contrasena + "','" + correo + "', '" + identificacion + "';");
+
+        console.log("EXEC spRegistro '" + nombre + "','" + apellido + "','" + contrasena + "','" + correo + "', '" + identificacion + "';");
+
 
         console.log(result.rowsAffected); // número de filas afectadas
 
@@ -63,7 +68,9 @@ exports.login = async (req, res) => {
             mailer.sendAuthenticationCode(correo, msg, res, this.respuesta)
 
         } else {
-            this.respuesta.error_500("El Correo o la contrasena es incorrecto");
+
+            this.respuesta.error_500("El Correo o la Contrasena es incorrecto.");
+
             res.json(this.respuesta);
         }
 
