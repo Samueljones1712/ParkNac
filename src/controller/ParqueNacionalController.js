@@ -25,15 +25,17 @@ exports.getParqueNacional = async (req, res) => {
 
 
 exports.addParqueNacional = async (req, res) => {
-    const { Nombre, Provincia, Tarifa_Extranjeros_dolares,
-        Tarifa_Nacionales_colones, Area_de_Conservacion, maxVisitantes, horario } = req.body
+    const { Nombre, Provincia, Tarifa_Extranjeros_dolares, Tarifa_Nacionales_colones, Area_de_Conservacion, maxVisitantes, horario } = req.body
 
     console.log("EXEC sp_insertPark '" + Nombre + "','" + Area_de_Conservacion + "','" + Provincia + "'," + Tarifa_Nacionales_colones + "," + Tarifa_Extranjeros_dolares + "," + maxVisitantes + "," + horario + ";");
+
 
     try {
         await pool.connect(); // Abrir conexión
 
+
         const result = await pool.query("EXEC sp_insertPark '" + Nombre + "','" + Area_de_Conservacion + "','" + Provincia + "'," + Tarifa_Nacionales_colones + "," + Tarifa_Extranjeros_dolares + "," + maxVisitantes + "," + horario + ";");
+
 
         console.log(result.rowsAffected); // número de filas afectadas
 

@@ -3,6 +3,7 @@ const EventEmitter = require('events');
 
 const multer = require('multer');
 const path = require('path');
+
 const emitter = new EventEmitter()
 // or 0 to turn off the limit
 emitter.setMaxListeners(0)
@@ -19,6 +20,7 @@ const controllerEntradas = require('../controller/EntradasController');
 const validateToken = require('./validate-token');
 
 const controllerIMG = require('../controller/controllerIMG');
+
 
 /* Session */
 router.post('/login', controllerUser.login);
@@ -48,9 +50,11 @@ router.put('/user/editar', validateToken, controllerUser.editUser)
 
 router.get('/user/administradores', validateToken, controllerUser.administradores);
 router.get('/user/view_administradores', validateToken, controllerUser.view_administradores);
+
 router.get('/user/padron/:Id', controllerUser.padron);
 
 router.post('/api/upload', controllerIMG.uploadImg);
+
 
 
 module.exports = router;
