@@ -29,11 +29,11 @@ router.post('/register', controllerUser.registerUser);
 
 
 /* Parque Nacional */
-router.get('/ParqueNacional', validateToken, controllerParque.getParqueNacional);
+router.get('/ParqueNacional', validateToken, controllerParque.getParquesNacionales);
 router.post('/ParqueNacional/add', validateToken, controllerParque.addParqueNacional);
 router.put('/ParqueNacional/add', validateToken, controllerParque.updateParqueNacional);
 router.delete('/ParqueNacional/delete/:Id', validateToken, controllerParque.deleteParqueNacional);
-
+router.get('/ParqueNacional/:Id', validateToken, controllerParque.getParqueNacional)
 /* Tarifa */
 router.get('/Entradas/', validateToken, controllerEntradas.getEntradas);
 router.post('/Entradas/add', validateToken, controllerEntradas.addEntradas);

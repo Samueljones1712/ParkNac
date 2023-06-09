@@ -9,7 +9,7 @@ exports.getEntradas = async (req, res) => {
 
     try {
         await pool.connect(); // Abrir conexión
-        const result = await pool.query("SELECT * FROM Entradas;");
+        const result = await pool.query(" Select * from vista_entradas_parques_usuarios;");
         pool.close(); // Cerrar conexión
         console.log(result.recordset)
         res.json(result.recordset)
