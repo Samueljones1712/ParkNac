@@ -22,11 +22,11 @@ exports.getEntradas = async (req, res) => {
 }
 
 
-exports.addEntradas = async (req, res) => {
+exports.addEntrada = async (req, res) => {
 
-    const { fecha, fk_idParque, fk_cedula, estado, fechaVencimiento, tarifa } = req.body;
+    const { } = req.body;
 
-    console.log(fechaVencimiento);
+    console.log(req.body);
 
     try {
 
@@ -35,7 +35,7 @@ exports.addEntradas = async (req, res) => {
         const result = await pool.query("EXEC sp_insertEntrada '" + fk_cedula + "'," + [fk_idParque] + "," + [tarifa] + ",'Nacional','" + [fechaVencimiento] + "';");
 
         this.respuesta.response.result = result.rowsAffected;
-        console.log(this.respuesta);
+        // console.log(this.respuesta);
         await pool.close(); // Cerrar conexión
         await res.json(this.respuesta);
 

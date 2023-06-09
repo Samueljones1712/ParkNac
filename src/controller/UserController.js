@@ -26,7 +26,7 @@ exports.registerUser = async (req, res) => {
 
         this.respuesta.response.result = result.rowsAffected;
 
-        console.log(this.respuesta);
+        // console.log(this.respuesta);
 
         await pool.close(); // Cerrar conexión
 
@@ -46,7 +46,7 @@ exports.generateToken = (req, res) => {
         correo: correo
     }, process.env.SECRET_KEY || 'pepito123',
         { expiresIn: '9990000' })
-    console.log(token)
+    // console.log(token)
     res.json({ token });
 }
 
@@ -83,7 +83,26 @@ exports.index = async (req, res) => {
     try {
         await pool.connect(); // Abrir conexión
         const result = await pool.query('SELECT * FROM usuarios');
-        console.log(result.recordset);
+        // console.log(result.recordset);
+        await res.json(result.recordset)
+        await pool.close(); // Cerrar conexión
+    } catch (err) {
+        console.error('Error al consultar usuarios', err);
+        res.send(err)
+    }
+}
+
+
+exports.getUserByCorreo = async (req, res) => {
+
+    const { correo } = req.params;
+
+    console.log(correo);
+
+    try {
+        await pool.connect(); // Abrir conexión
+        const result = await pool.query("SELECT * FROM usuarios where correo='" + correo + "';");
+        // console.log(result.recordset);
         await res.json(result.recordset)
         await pool.close(); // Cerrar conexión
     } catch (err) {
