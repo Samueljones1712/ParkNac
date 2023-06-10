@@ -64,6 +64,8 @@ exports.addParqueNacional = async (req, res) => {
 
         this.respuesta.response.result = result.rowsAffected;
 
+        this.respuesta.response.status = "ok";
+
         console.log(this.respuesta);
 
         await pool.close(); // Cerrar conexión

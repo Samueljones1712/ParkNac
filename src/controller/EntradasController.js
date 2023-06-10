@@ -48,26 +48,26 @@ exports.updateEntradas = async (req, res) => {
 
     const { fecha, fk_idUsuario, fk_idParque, estado, id, fechaVencimiento, CantExtranjeros, CantNacionales, tarifaNacionales, tarifaExtranjeros, hora } = req.body;
 
-    console.log(req.body);
-
     this.respuesta.response.status = "ok";
 
-    await res.json(this.respuesta);
-    // try {
+    try {
 
-    //     await pool.connect(); // Abrir conexión    
+        await pool.connect(); // Abrir conexión   
 
-    //     const result = await pool.query("update '" + fk_idUsuario + "'," + [fk_idParque] + "," + [CantExtranjeros] + "," + [CantNacionales] + ", '" + [fechaVencimiento] + "', '" + [hora] + "' ;");
+        console.log("EXEC sp_editEntrada '" + id + "'," + [fk_idParque] + ",'" + [fechaVencimiento] + "'," + [CantNacionales] + ", " + [CantExtranjeros] + ",'" + [tarifaNacionales] + "','" + [tarifaExtranjeros] + " ','" + [hora] + "' ;");
 
-    //     this.respuesta.response.result = result.rowsAffected;
-    //     // console.log(this.respuesta);
-    //     await pool.close(); // Cerrar conexión
-    //     await res.json(this.respuesta);
+        const result = await pool.query("EXEC sp_editEntrada '" + id + "'," + [fk_idParque] + ",'" + [fechaVencimiento] + "'," + [CantNacionales] + ", " + [CantExtranjeros] + ",'" + [tarifaNacionales] + "','" + [tarifaExtranjeros] + " ','" + [hora] + "' ;");
 
-    // } catch (err) {
-    //     console.error('Error al insertar la entrada', err);
-    //     res.send(err)
-    // }
+        this.respuesta.response.result = result.rowsAffected;
+        // console.log(this.respuesta);
+        await pool.close(); // Cerrar conexión
+        await res.json(this.respuesta);
+
+    } catch (err) {
+        console.error('Error al insertar la entrada', err);
+        res.send(err)
+    }
+
 }
 
 exports.deleteEntradas = async (req, res) => {

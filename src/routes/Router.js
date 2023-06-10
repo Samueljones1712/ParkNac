@@ -17,6 +17,7 @@ const router = express.Router();
 const controllerUser = require('../controller/UserController');
 const controllerParque = require('../controller/ParqueNacionalController');
 const controllerEntradas = require('../controller/EntradasController');
+const controllerControl = require('../controller/ControlController')
 const validateToken = require('./validate-token');
 
 const controllerIMG = require('../controller/controllerIMG');
@@ -55,6 +56,7 @@ router.get('/user/padron/:Id', controllerUser.padron);
 
 router.post('/api/upload', controllerIMG.uploadImg);
 
-
+//Control Interno
+router.post('/control/add', validateToken, controllerControl.addControlInterno);
 
 module.exports = router;

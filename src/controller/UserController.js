@@ -240,4 +240,6 @@ exports.editUser = async (req, res) => {
         console.error('Error al eliminar el usuario', err);
         res.send(err)
     }
+
+
 }
