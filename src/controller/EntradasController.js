@@ -9,7 +9,7 @@ exports.getEntradas = async (req, res) => {
 
     try {
         await pool.connect(); // Abrir conexión
-        const result = await pool.query("SELECT * FROM Entradas;");
+        const result = await pool.query(" Select * from vista_entradas_parques_usuarios;");
         pool.close(); // Cerrar conexión
         console.log(result.recordset)
         res.json(result.recordset)
@@ -22,20 +22,20 @@ exports.getEntradas = async (req, res) => {
 }
 
 
-exports.addEntradas = async (req, res) => {
+exports.addEntrada = async (req, res) => {
 
-    const { fecha, fk_idParque, fk_cedula, estado, fechaVencimiento, tarifa } = req.body;
+    const { fecha, fk_idUsuario, fk_idParque, estado, id, fechaVencimiento, CantExtranjeros, CantNacionales, tarifaNacionales, tarifaExtranjeros, hora } = req.body;
 
-    console.log(fechaVencimiento);
+    console.log("EXEC sp_insertEntrada '" + fk_idUsuario + "'," + [fk_idParque] + "," + [CantExtranjeros] + "," + [CantNacionales] + ", '" + [fechaVencimiento] + "', '" + [hora] + "';");
 
     try {
 
         await pool.connect(); // Abrir conexión    
 
-        const result = await pool.query("EXEC sp_insertEntrada '" + fk_cedula + "'," + [fk_idParque] + "," + [tarifa] + ",'Nacional','" + [fechaVencimiento] + "';");
+        const result = await pool.query("EXEC sp_insertEntrada '" + fk_idUsuario + "'," + [fk_idParque] + "," + [CantExtranjeros] + "," + [CantNacionales] + ", '" + [fechaVencimiento] + "', '" + [hora] + "' ;");
 
         this.respuesta.response.result = result.rowsAffected;
-        console.log(this.respuesta);
+        // console.log(this.respuesta);
         await pool.close(); // Cerrar conexión
         await res.json(this.respuesta);
 
