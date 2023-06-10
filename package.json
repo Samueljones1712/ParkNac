@@ -4,6 +4,7 @@
   "description": "labCrud",
   "main": "index.js",
   "dependencies": {
+    "axios": "^1.4.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
@@ -20,7 +21,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js"
   },
-  
   "author": "",
   "license": "IST",
   "devDependencies": {
