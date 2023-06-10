@@ -26,8 +26,6 @@ exports.addEntrada = async (req, res) => {
 
     const { fecha, fk_idUsuario, fk_idParque, estado, id, fechaVencimiento, CantExtranjeros, CantNacionales, tarifaNacionales, tarifaExtranjeros, hora } = req.body;
 
-    console.log("EXEC sp_insertEntrada '" + fk_idUsuario + "'," + [fk_idParque] + "," + [CantExtranjeros] + "," + [CantNacionales] + ", '" + [fechaVencimiento] + "', '" + [hora] + "';");
-
     try {
 
         await pool.connect(); // Abrir conexión    
@@ -48,9 +46,28 @@ exports.addEntrada = async (req, res) => {
 
 exports.updateEntradas = async (req, res) => {
 
+    const { fecha, fk_idUsuario, fk_idParque, estado, id, fechaVencimiento, CantExtranjeros, CantNacionales, tarifaNacionales, tarifaExtranjeros, hora } = req.body;
+
     console.log(req.body);
 
-    res.json(this.respuesta);
+    this.respuesta.response.status = "ok";
+
+    await res.json(this.respuesta);
+    // try {
+
+    //     await pool.connect(); // Abrir conexión    
+
+    //     const result = await pool.query("update '" + fk_idUsuario + "'," + [fk_idParque] + "," + [CantExtranjeros] + "," + [CantNacionales] + ", '" + [fechaVencimiento] + "', '" + [hora] + "' ;");
+
+    //     this.respuesta.response.result = result.rowsAffected;
+    //     // console.log(this.respuesta);
+    //     await pool.close(); // Cerrar conexión
+    //     await res.json(this.respuesta);
+
+    // } catch (err) {
+    //     console.error('Error al insertar la entrada', err);
+    //     res.send(err)
+    // }
 }
 
 exports.deleteEntradas = async (req, res) => {
