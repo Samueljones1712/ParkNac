@@ -13,7 +13,7 @@ const config = {
 }
 */
 
-const config = {
+/*const config = {
     user: 'user1',
     password: 'Parnac2023',
     server: 'parnac-server.database.windows.net',
@@ -22,6 +22,19 @@ const config = {
         trustedconection: false,
         enableArithAbort: true,
         encrypt: true,
+    }
+}*/
+
+const config = {
+    user: 'sqlserver',
+    password: 'parnac23',
+    server: '34.135.153.59',
+    database: 'ParNac',
+    options: {
+        trustedconection: false,
+        enableArithAbort: true,
+        encrypt: true,
+        trustServerCertificate: true
     }
 }
 
