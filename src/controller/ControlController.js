@@ -19,9 +19,9 @@ exports.addControlInterno = async (req, res) => {
 
         await pool.connect(); // Abrir conexión   
 
-        console.log("insert into RegistroActividad (pk_idUsuario,detalle,fechaHora,ipAddress) values (" + pk_idUsuario + ",'" + detalle + "'," + fechaHora + ",'" + ipAddress + "');");
+        console.log("insert into RegistroActividad (pk_idUsuario,detalle,fechaHora,ipAddress) values (" + pk_idUsuario + ",getDate()," + fechaHora + ",'" + ipAddress + "');");
 
-        const result = await pool.query("insert into RegistroActividad (pk_idUsuario,detalle,fechaHora,ipAddress) values (" + pk_idUsuario + ",'" + detalle + "'," + fechaHora + ",'" + ipAddress + "');");
+        const result = await pool.query("insert into RegistroActividad (pk_idUsuario,detalle,fechaHora,ipAddress) values (" + pk_idUsuario + ",'" + detalle + "',getDate(),'" + ipAddress + "');");
 
         this.respuesta.response.result = result.recordsets;
         // console.log(this.respuesta);
