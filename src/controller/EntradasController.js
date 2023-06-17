@@ -118,12 +118,12 @@ exports.deleteEntradas = async (req, res) => {
     }
 
 }
-exports.getEspaciosDisponibles = async (req, res) => {
+exports.getEntradasParque = async (req, res) => {
     const { fk_idParque, fechaVencimiento } = req.body;
 
     try {
         await pool.connect();
-        const query = "SELECT COUNT(Entradas.id) AS Cantidad FROM Entradas WHERE Entradas.fk_idParque =" + fk_idParque + " AND Entradas.fechaVencimiento ='" + fechaVencimiento + "'";
+        const query = "SELECT SUM(Entradas.cantidadExtranjeros+Entradas.cantidadNacionales) AS Cantidad FROM Entradas WHERE Entradas.fk_idParque =" + fk_idParque + " AND Entradas.fechaVencimiento ='" + fechaVencimiento + "'";
         console.log(query);
         const result = await pool.query(query);
 
