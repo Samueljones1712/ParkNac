@@ -40,7 +40,7 @@ router.get('/Entradas/', validateToken, controllerEntradas.getEntradas);
 router.post('/Entradas/add', validateToken, controllerEntradas.addEntrada);
 router.put('/Entradas/actualizar', validateToken, controllerEntradas.updateEntradas);
 router.delete('/Entradas/delete/:Id', validateToken, controllerEntradas.deleteEntradas);
-router.post('/Entradas/getEspacios',controllerEntradas.getEspaciosDisponibles);
+router.post('/Entradas/getEntradasParque',controllerEntradas.getEntradasParque);
 
 /* Usuario */
 router.get('/user', validateToken, controllerUser.index);

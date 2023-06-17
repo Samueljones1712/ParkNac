@@ -30,9 +30,9 @@ exports.addEntrada = async (req, res) => {
 
         await pool.connect(); // Abrir conexión    
 
-        const result = await pool.query("EXEC sp_insertEntrada '" + fk_idUsuario + "'," + [fk_idParque] + "," + [CantExtranjeros] + "," + [CantNacionales] + ", '" + [fechaVencimiento] + "', '" + [hora] + "' ;");
+        //const result = await pool.query("EXEC sp_insertEntrada '" + fk_idUsuario + "'," + [fk_idParque] + "," + [CantExtranjeros] + "," + [CantNacionales] + ", '" + [fechaVencimiento] + "', '" + [hora] + "' ;");
 
-        this.respuesta.response.result = result.rowsAffected;
+        //this.respuesta.response.result = result.rowsAffected;
         // console.log(this.respuesta);
         await pool.close(); // Cerrar conexión
         await res.json(this.respuesta);
@@ -96,7 +96,7 @@ exports.deleteEntradas = async (req, res) => {
     }
 
 }
-exports.getEspaciosDisponibles = async (req, res) => {
+exports.getEntradasParque = async (req, res) => {
     const { fk_idParque, fechaVencimiento } = req.body;
 
     try {
