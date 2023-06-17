@@ -5,6 +5,28 @@ this.respuesta = new Respuestas();
 
 const pool = new db.sql.ConnectionPool(db.config);
 
+exports.getEntradaByDate = async (req, res) => {
+
+    const fechas = req.body;
+
+    console.log(fechas);
+
+
+    try {
+        await pool.connect(); // Abrir conexión
+        const result = await pool.query("select * from Entradas where Entradas.fecha>='" + fechas[0] + "' AND Entradas.fecha<='" + fechas[1] + "'");
+        pool.close(); // Cerrar conexión
+        // console.log(result.recordset)
+        res.json(result.recordset)
+
+    } catch (err) {
+        this.respuesta.error_500();
+
+        res.json(this.respuesta);
+    }
+
+}
+
 exports.getEntradas = async (req, res) => {
 
     try {
@@ -20,6 +42,8 @@ exports.getEntradas = async (req, res) => {
         res.json(this.respuesta);
     }
 }
+
+
 
 
 exports.addEntrada = async (req, res) => {
