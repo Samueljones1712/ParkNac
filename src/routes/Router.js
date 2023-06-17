@@ -59,5 +59,6 @@ router.post('/api/upload', controllerIMG.uploadImg);
 
 //Control Interno
 router.post('/control/add', validateToken, controllerControl.addControlInterno);
+router.get('/control/', validateToken, controllerControl.getControlInterno);
 
 module.exports = router;
