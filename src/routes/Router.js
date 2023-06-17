@@ -40,7 +40,7 @@ router.get('/Entradas/', validateToken, controllerEntradas.getEntradas);
 router.post('/Entradas/add', validateToken, controllerEntradas.addEntrada);
 router.put('/Entradas/actualizar', validateToken, controllerEntradas.updateEntradas);
 router.delete('/Entradas/delete/:Id', validateToken, controllerEntradas.deleteEntradas);
-router.post('/Entradas/getEspacios',controllerEntradas.getEspaciosDisponibles);
+router.post('/Entradas/getEspacios', controllerEntradas.getEspaciosDisponibles);
 
 /* Usuario */
 router.get('/user', validateToken, controllerUser.index);
@@ -59,5 +59,6 @@ router.post('/api/upload', controllerIMG.uploadImg);
 
 //Control Interno
 router.post('/control/add', validateToken, controllerControl.addControlInterno);
+router.get('/control/', validateToken, controllerControl.getControlInterno);
 
 module.exports = router;
