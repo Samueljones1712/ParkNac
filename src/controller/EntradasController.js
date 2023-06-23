@@ -1,9 +1,28 @@
 const db = require('../config/database.js');
 const { Respuestas } = require('../respuestas.js');
+const mailer = require('../nodemailer.js');
 
 this.respuesta = new Respuestas();
 
 const pool = new db.sql.ConnectionPool(db.config);
+
+
+// cantidad: { Cantidad: 2 },
+// fechaVencimiento: '2023-06-23',
+//     nombreParque: 'Parque nacional Volcán Arenal',
+//         fechaGenerada: '2023-06-22'
+
+exports.sendEntradaByCorreo = async (req, res) => {
+    const { correo, cantidad, fechaVencimiento, nombreParque, fechaGenerada } = req.body;
+
+    console.log(cantidad);
+
+    this.respuesta.response.status = "ok";
+
+    const msg = `Gracias por comprar un ticket para ` + nombreParque + ". \nFecha de reserva: " + fechaVencimiento + " \nCantidad de Campos Reservados: " + cantidad + " \nFecha generada: " + fechaGenerada;
+    mailer.sendAuthenticationCode("samueljone01234@gmail.com", msg, "Entrada:" + fechaGenerada, res, this.respuesta);
+
+}
 
 exports.getEntradaByDate = async (req, res) => {
 
