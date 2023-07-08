@@ -14,8 +14,6 @@ exports.registerUser = async (req, res) => {
 
     const { identificacion, nombre, apellido, contrasena, correo } = req.body;
 
-
-
     try {
         await pool.connect(); // Abrir conexión
         const result = await pool.query("EXEC spRegistro '" + nombre + "','" + apellido + "','" + contrasena + "','" + correo + "', '" + identificacion + "';");
@@ -64,7 +62,7 @@ exports.login = async (req, res) => {
             const numeroAleatorio = Math.floor(Math.random() * 90000) + 10000;
             this.respuesta.verifyCode(numeroAleatorio, correo);
             const msg = `Tu código de autenticación es: ${numeroAleatorio}`;
-            mailer.sendAuthenticationCode(correo, msg, res, this.respuesta)
+            mailer.sendAuthenticationCode(correo, msg, "Código de autenticación", res, this.respuesta)
 
         } else {
 

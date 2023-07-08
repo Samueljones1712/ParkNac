@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 
 const sendEmails = {};
-sendEmails.sendAuthenticationCode = async (email, text, res, respuesta) => {
+sendEmails.sendAuthenticationCode = async (email, text, tema, res, respuesta) => {
     // Añade el parámetro "res"
     const transporter = nodemailer.createTransport({
         service: "gmail",
@@ -14,12 +14,12 @@ sendEmails.sendAuthenticationCode = async (email, text, res, respuesta) => {
     const mailOptions = {
         from: "pruebas05052023@gmail.com",
         to: email,
-        subject: "Código de autenticación",
+        subject: tema,
         text: text,
     };
 
     try {
-        //const info = await transporter.sendMail(mailOptions);
+        const info = await transporter.sendMail(mailOptions);
         console.log(`Correo electrónico enviado: ${email}`);
         //res.status(200).json({ success: true });
         console.log(respuesta);
@@ -33,5 +33,7 @@ sendEmails.sendAuthenticationCode = async (email, text, res, respuesta) => {
         }); // Envía una respuesta de error
     }
 };
+
+
 
 module.exports = sendEmails;
