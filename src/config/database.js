@@ -26,9 +26,9 @@ const config = {
 }*/
 
 const config = {
-    user: 'sqlserver',
-    password: 'parnac23',
-    server: '34.135.153.59',
+    user: 'informatica123',
+    password: 'informatica123',
+    server: 'PC-LAPTOP',
     database: 'ParNac',
     options: {
         trustedconection: false,
