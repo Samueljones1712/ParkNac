@@ -41,10 +41,10 @@ router.post('/Entradas/add', validateToken, controllerEntradas.addEntrada);
 router.put('/Entradas/actualizar', validateToken, controllerEntradas.updateEntradas);
 router.delete('/Entradas/delete/:Id', validateToken, controllerEntradas.deleteEntradas);
 
-router.post('/Entradas/getEspacios', controllerEntradas.getEspaciosDisponibles);
-router.post('/Entradas/getByDate', controllerEntradas.getEntradaByDate);
+//router.post('/Entradas/getEspacios', validateToken, controllerEntradas.getEspaciosDisponibles);
+router.post('/Entradas/getByDate', validateToken, controllerEntradas.getEntradaByDate);
 
-router.post('/Entradas/getEntradasParque', controllerEntradas.getEntradasParque);
+router.post('/Entradas/getEntradasParque', validateToken, controllerEntradas.getEntradasParque);
 
 
 /* Usuario */
