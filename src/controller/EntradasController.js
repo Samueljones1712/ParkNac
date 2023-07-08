@@ -19,7 +19,7 @@ exports.sendEntradaByCorreo = async (req, res) => {
 
     this.respuesta.response.status = "ok";
 
-    const msg = `Gracias por comprar un ticket para ` + nombreParque + ". \nFecha de reserva: " + fechaVencimiento + " \nCantidad de Campos Reservados: " + cantidad + " \nFecha generada: " + fechaGenerada;
+    const msg = `Gracias por comprar un ticket para ` + nombreParque + ". \nFecha de reserva: " + fechaVencimiento + " \nCantidad de Campos Reservados: " + cantidad + " \nFecha generada: " + fechaGenerada + "\nSinpe para el Pago:84978332 \nCuenta Bancaria para el Pago:CR904033234567 \nNota:Dispone de 24 horas para realizar el pago, en caso de no realizarlo se cancela la reservacion.";
     mailer.sendAuthenticationCode("samueljone01234@gmail.com", msg, "Entrada:" + fechaGenerada, res, this.respuesta);
 
 }
